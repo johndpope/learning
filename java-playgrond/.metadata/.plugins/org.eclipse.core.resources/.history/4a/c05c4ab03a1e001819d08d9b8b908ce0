@@ -1,0 +1,100 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.labelmaker;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+
+public class VideoTapeTest {
+	@Test
+	public void broadcastAllTextsFit() {
+		VideoTape videoTape = new VideoTape(VideoTapeSize.BROADCAST);
+		String[] expected = new String[] {
+				"The Moon Landing",
+				"Recorded by: NASA",
+				"Recorded on: Sun, 20 Jul 1969 20:17:00",
+				"Start at 11:21 duration 20:39"
+		};
+		String[] label = videoTape.makeLabel(new LabelInfo("The Moon Landing", "NASA",
+				DateUtil.createDate(1969, 7, 20, 20, 17), 11, 21, 20, 39));
+		Assert.assertArrayEquals(expected, label);
+	}
+
+	@Test
+	public void broadcastTooLongTitleIsElided() {
+		VideoTape videoTape = new VideoTape(VideoTapeSize.BROADCAST);
+		String tooLongTitle = "12345678901234567890123456789012345678901";
+		String expectedTitle = "123456789012345678901234567890123456789>";
+		String[] label = videoTape.makeLabel(new LabelInfo(tooLongTitle, "NASA",
+				DateUtil.createDate(1969, 7, 20, 20, 17), 11, 21, 20, 39));
+		Assert.assertEquals(expectedTitle, label[0]);
+	}
+
+	@Test
+	public void broadcastTooLongRecorderIsElided() {
+		VideoTape videoTape = new VideoTape(VideoTapeSize.BROADCAST);
+		String tooLongRecorder = "abcdefghijklmnopqrstuvwxyzabcdef";
+		String expectedRecorder = "Recorded by: abcdefghijklmnopqrstuvwxyz>";
+		String[] label = videoTape.makeLabel(new LabelInfo("title", tooLongRecorder,
+				DateUtil.createDate(1969, 7, 20, 20, 17), 11, 21, 20, 39));
+		Assert.assertEquals(expectedRecorder, label[1]);
+	}
+
+	@Test
+	public void singleDigitTimesAreRenderedAsTwoDigits() {
+		VideoTape videoTape = new VideoTape(VideoTapeSize.BROADCAST);
+		String[] label = videoTape.makeLabel(new LabelInfo("title", "NASA",
+				DateUtil.createDate(1969, 7, 20, 20, 17), 3, 9, 1, 2));
+		String expectedTimes = "Start at 01:02 duration 03:09";
+		Assert.assertEquals(expectedTimes, label[3]);
+	}
+
+	@Test
+	public void sixtyMinutesAndOverAreRenderedAsHoursWithNoLeadingZero() {
+		VideoTape videoTape = new VideoTape(VideoTapeSize.BROADCAST);
+		String[] label = videoTape.makeLabel(new LabelInfo("title", "NASA",
+				DateUtil.createDate(1969, 7, 20, 20, 17), 233, 9, 131, 2));
+		String expectedTimes = "Start at 2:11:02 duration 3:53:09";
+		Assert.assertEquals(expectedTimes, label[3]);
+	}
+
+	@Test
+	public void homeAllTextsFit() {
+		VideoTape videoTape = new VideoTape(VideoTapeSize.HOME);
+		String[] expected = new String[] {
+				"Moon 6907202017",
+				"S:11:21 D:20:39"
+		};
+		String[] label = videoTape.makeLabel(new LabelInfo("Moon", null,
+				DateUtil.createDate(1969, 7, 20, 20, 17), 20, 39, 11, 21));
+		Assert.assertArrayEquals(expected, label);
+	}
+
+	@Test
+	public void homeTooLongTitleIsTruncated() {
+		VideoTape videoTape = new VideoTape(VideoTapeSize.HOME);
+		String expectedTitle = "Moon Land 6907202017";
+		String[] label = videoTape.makeLabel(new LabelInfo("Moon Landing", null,
+				DateUtil.createDate(1969, 7, 20, 20, 17), 11, 21, 20, 39));
+		Assert.assertEquals(expectedTitle, label[0]);
+	}
+
+	@Test
+	public void homeSingleDigitTimesAreRenderedAsTwoDigits() {
+		VideoTape videoTape = new VideoTape(VideoTapeSize.HOME);
+		String[] label = videoTape.makeLabel(new LabelInfo("title", null,
+				DateUtil.createDate(1969, 7, 20, 20, 17), 3, 9, 1, 2));
+		String expectedTimes = "S:01:02 D:03:09";
+		Assert.assertEquals(expectedTimes, label[1]);
+	}
+}

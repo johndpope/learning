@@ -1,0 +1,13 @@
+{
+  "name": "edge-detection",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Khalil Chatoo",
+  "license": "MIT",
+  "scripts": {
+    "build": "node app.js"
+  },
+  "dependencies": {
+    "opencv": "^6.0.0"
+  }
+}

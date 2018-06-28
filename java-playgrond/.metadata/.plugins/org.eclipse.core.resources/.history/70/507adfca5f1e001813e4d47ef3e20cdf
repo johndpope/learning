@@ -1,0 +1,39 @@
+package practice;
+
+public class BinaryTree {
+	TreeNode root;
+	
+	public static int getHeight(TreeNode root) {
+		if (root == null) return 0;
+		return Math.max(getHeight(root.left), getHeight(root.right)) + 1;
+	}
+	
+	public static int getDiameter(TreeNode root) {
+		if (root == null) return 0;
+		int rootDiameter = getHeight(root.left) + getHeight(root.right) + 1;
+		int leftDiameter = getDiameter(root.left);
+		int rightDiameter = getDiameter(root.right);
+		return Math.max(rootDiameter, Math.max(leftDiameter, rightDiameter));
+	}
+	
+	public static void main(String[] args) {
+		BinaryTree tree = new BinaryTree();
+		tree.root = new TreeNode(5);
+		tree.root.left = new TreeNode(4);
+		tree.root.right = new TreeNode(6);
+		tree.root.left.left = new TreeNode(3);
+		System.out.println(getDiameter(tree.root));
+	}
+}
+
+class TreeNode {
+	public TreeNode left;
+	public TreeNode right;
+	public int data;
+	
+	public TreeNode(int data) {
+		this.data = data;
+		this.left = null;
+		this.right = null;
+	}
+}

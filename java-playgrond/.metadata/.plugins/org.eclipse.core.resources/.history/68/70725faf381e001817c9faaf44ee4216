@@ -1,0 +1,70 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.labelmaker;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class VideoTape extends Tape {
+	private VideoTapeSize size;
+
+	public VideoTape(VideoTapeSize size) {
+		this.size = size;
+	}
+	
+	public String[] makeLabel (LabelInfo labelInfo) {
+		return null;
+	}
+
+	public String[] makeLabel(String title, String recorder,
+			Date recordingDate, int startAtMinutes, int startAtSeconds,
+			int durationMinutes, int durationSeconds) {
+		String[] label = null;
+		if (size == VideoTapeSize.HOME) {
+			label = new String[2];
+			label[0] = fitTitleTo(title, 9) + " " + dateInTenDigitFormat(recordingDate);
+			// hidden bug here: if values are way too large the label will be wider than 20
+			label[1] = "S:" + Utilities.formatTime(startAtMinutes, startAtSeconds) + " D:" + Utilities.formatTime(durationMinutes, durationSeconds);
+		}
+		else if (size == VideoTapeSize.BROADCAST) {
+			label = new String[] {
+				fitTitleTo(title, 40),
+				"Recorded by: " + fitRecorderTo(recorder, 40-"Recorded by: ".length()),
+				"Recorded on: " + dateInLongForm(recordingDate),
+				"Start at " + Utilities.formatTime(startAtMinutes, startAtSeconds) + " duration " + Utilities.formatTime(durationMinutes, durationSeconds)
+			};
+		}
+		return label;
+	}
+
+	private String dateInLongForm(Date date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+		return dateFormat.format(date);
+	}
+
+	private String fitRecorderTo(String recorder, int length) {
+		if (recorder.length() > length-1)
+			return recorder.substring(0, length-1) + ">";
+		else
+			return recorder;
+	}
+
+	@Override
+	protected int labelHeight() {
+		return size == VideoTapeSize.HOME ? 2 : 4;
+	}
+
+	@Override
+	protected int labelWidth() {
+		return size == VideoTapeSize.BROADCAST ? 20 : 40;
+	}
+}

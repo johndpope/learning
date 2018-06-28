@@ -1,0 +1,32 @@
+package practice;
+
+public class TreeNode {
+	public TreeNode left;
+	public TreeNode right;
+	public int data;
+	
+	public TreeNode(int data) {
+		this.data = data;
+		this.left = null;
+		this.right = null;
+	}
+}
+
+class BinaryTree {
+	TreeNode root;
+	
+	public static int getHeight(TreeNode root) {
+		if (root == null) return 0;
+		return Math.max(root.left.data, root.right.data) + 1;
+	}
+	
+	public static void main(String[] args) {
+		BinaryTree tree = new BinaryTree();
+		tree.root = new TreeNode(5);
+		tree.root.left = new TreeNode(4);
+		tree.root.right = new TreeNode(6);
+		tree.root.left.left = new TreeNode(3);
+		System.out.println(getHeight(tree.root));
+	}
+
+}

@@ -1,0 +1,118 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.cashregister;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.ppp.util.Money;
+
+public class PurchaseTest {
+	private static final String PROD_TAXABLE_1 = "111100000000";
+	private static final String PROD_TAXABLE_2 = "222200000000";
+	private static final String PROD_TAXABLE_UNDER_THRESHOLD = "454500000000";
+	private static final String PROD_NONTAXABLE_1 = "010101010101";
+	private static final String PROD_NONTAXABLE_2 = "000000005678";
+	private static final String PROD_NONTAXABLE_3 = "000000001234";
+//	private static final Money PRICE_TAXABLE_1 = Purchase.productData.get(PROD_TAXABLE_1).price;
+//	private static final Money PRICE_TAXABLE_2 = Purchase.productData.get(PROD_TAXABLE_2).price;
+//	private static final Money PRICE_NONTAXABLE_1 = Purchase.productData.get(PROD_NONTAXABLE_1).price;
+//	private static final Money PRICE_NONTAXABLE_2 = Purchase.productData.get(PROD_NONTAXABLE_2).price;
+//	private static final Money PRICE_NONTAXABLE_3 = Purchase.productData.get(PROD_NONTAXABLE_3).price;
+	private static final Money PRICE_TAXABLE_1 = null;
+	private static final Money PRICE_TAXABLE_2 = null;
+	private static final Money PRICE_NONTAXABLE_1 = null;
+	private static final Money PRICE_NONTAXABLE_2 = null;
+	private static final Money PRICE_NONTAXABLE_3 = null;
+
+	private Purchase purchase;
+	private ProductInfoSource database;
+
+	@Before
+	public void setUp() {
+		database = new FakeProductInfoSource();
+		purchase = new Purchase(database);
+	}
+
+	@Test
+	public void emptyPurchase() {
+		Assert.assertEquals(new Money(0), purchase.total());
+	}
+	
+	@Test
+	public void totalOneNontaxableProduct() {
+		addProduct(PROD_NONTAXABLE_3);
+		Assert.assertEquals(PRICE_NONTAXABLE_3, purchase.total());
+	}
+
+	@Test
+	public void totalMultipleNontaxableProducts() {
+		addProduct(PROD_NONTAXABLE_1);
+		addProduct(PROD_NONTAXABLE_2);
+		addProduct(PROD_NONTAXABLE_3);
+		Money expected = PRICE_NONTAXABLE_1.add(PRICE_NONTAXABLE_2).add(PRICE_NONTAXABLE_3);
+		Assert.assertEquals(expected, purchase.total());
+	}
+
+	@Test
+	public void totalMultipleProducts() {
+		addProduct(PROD_NONTAXABLE_1);
+		addProduct(PROD_TAXABLE_2);
+		addProduct(PROD_TAXABLE_1);
+		Money tax = (PRICE_TAXABLE_2.add(PRICE_TAXABLE_1)).multiply(Purchase.TAX);
+		Money expected = PRICE_NONTAXABLE_1.add(PRICE_TAXABLE_2).add(PRICE_TAXABLE_1).add(tax);
+		Assert.assertEquals(expected, purchase.total());
+	}
+
+	@Test
+	public void subtotalMultipleNontaxableProducts() {
+		addProduct(PROD_NONTAXABLE_1);
+		addProduct(PROD_TAXABLE_2);
+		addProduct(PROD_NONTAXABLE_3);
+		Money expected = PRICE_NONTAXABLE_1.add(PRICE_TAXABLE_2).add(PRICE_NONTAXABLE_3);
+		Assert.assertEquals(expected, purchase.subtotal());
+	}
+
+	@Test
+	public void taxOnNontaxableProductIsZero() {
+		addProduct(PROD_NONTAXABLE_3);
+		Assert.assertEquals(new Money(0), purchase.tax());
+	}
+
+	@Test
+	public void taxOnTaxableProduct() {
+		addProduct(PROD_TAXABLE_1);
+		final Money expected = PRICE_TAXABLE_1.multiply(Purchase.TAX);
+		Assert.assertEquals(expected, purchase.tax());
+	}
+
+	@Test
+	public void taxOnMultipleTaxableProducts() {
+		addProduct(PROD_TAXABLE_2);
+		addProduct(PROD_NONTAXABLE_3);
+		addProduct(PROD_TAXABLE_1);
+		final Money expected = (PRICE_TAXABLE_2.add(PRICE_TAXABLE_1)).multiply(Purchase.TAX);
+		Assert.assertEquals(expected, purchase.tax());
+	}
+	
+	@Test
+	public void taxZeroIfSubtotalUnderTaxationThreshold() {
+		addProduct(PROD_TAXABLE_UNDER_THRESHOLD);
+		Assert.assertEquals(new Money(0), purchase.tax());
+		Assert.assertEquals(purchase.total(), purchase.subtotal());
+	}
+
+	private void addProduct(final String product) {
+		purchase.add(product);
+	}
+}

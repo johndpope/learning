@@ -1,0 +1,47 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.labelmaker;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public abstract class Media {
+	protected abstract int labelWidth();
+	protected abstract int labelHeight();
+	
+	public abstract String[] makeLabel(LabelInfo label);
+	
+	public abstract String[] makeLabel(String title, String recorder,
+			Date recordingDate, int startAtMinutes, int startAtSeconds,
+			int durationMinutes, int durationSeconds);
+
+	protected String fitTitleTo(String title, int length) {
+		if (length > 20) {
+			// Over 20 characters: elide
+			if (title.length() > length-1)
+				return title.substring(0, length-1) + ">";
+			else
+				return title;
+		}
+		// Otherwise truncate (so we don't waste space on the elision marker)
+		if (title.length() > length)
+			return title.substring(0, length);
+		else
+			return title;
+	}
+
+	protected String dateInTenDigitFormat(Date recordingDate) {
+		DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmm");
+		return dateFormat.format(recordingDate);
+	}
+}

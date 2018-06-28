@@ -1,0 +1,36 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.cashregister;
+
+import com.ppp.paga.PAGAClient;
+import com.ppp.util.*;
+
+public class CheckOut {
+	private PAGAClient pagaClient;
+	private String string;
+	
+	public CheckOut(String string, PAGAClient pagaClient) {
+		this.string = string;
+		this.pagaClient = pagaClient;
+	}
+	
+	public String errorMessage() {
+		return null;
+	}
+	
+	public boolean pay(String cardNumber, String expiration, Money money) { 
+		if (!pagaClient.startTransaction(merchantID)) {
+			
+		}
+		return false;
+	}
+}

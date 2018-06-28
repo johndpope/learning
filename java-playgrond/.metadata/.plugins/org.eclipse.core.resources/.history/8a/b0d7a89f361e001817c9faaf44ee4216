@@ -1,0 +1,27 @@
+package com.ppp.labelmaker;
+
+public class Label {
+	/*
+	 * 	String[] label = new String[labelHeight()];
+		label[0] = fitTitleTo(title, 15) + " " + dateInTenDigitFormat(recordingDate);
+		label[1] = "Start" + formatTime(startAtMinutes, startAtSeconds) + " dur" + formatTime(durationMinutes, durationSeconds);
+		return label;
+	 */
+	private String title;
+	private String time;
+	private int labelWidth;
+	private int labelHeight;
+
+	public Label(String title, String time, int labelWidth, int labelHeight) {
+		this.title = title;
+		this.time = time;
+		this.labelWidth = labelWith;
+		this.labelHeight = labelHeight;
+	}
+	public labelWidth() {
+		return this.labelWidth;
+	}
+	public labelHeight() {
+		return this.labelWidth;
+	}
+}

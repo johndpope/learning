@@ -1,0 +1,53 @@
+package practice;
+
+import java.util.*;
+
+public class T9Prediction {
+	private static Map<Integer, Set<Character>> getKeyMappings() {
+		Map<Integer, Set<Character>> keyMappings = new HashMap<Integer, Set<Character>>();
+		keyMappings.put(2, new HashSet<Character>(Arrays.asList('a', 'b', 'c')));
+		keyMappings.put(3, new HashSet<Character>(Arrays.asList('d', 'e', 'f')));
+		keyMappings.put(4, new HashSet<Character>(Arrays.asList('g', 'h', 'i')));
+		keyMappings.put(5, new HashSet<Character>(Arrays.asList('j', 'k', 'l')));
+		keyMappings.put(6, new HashSet<Character>(Arrays.asList('m', 'n', 'o')));
+		keyMappings.put(7, new HashSet<Character>(Arrays.asList('p', 'q', 'r', 's')));
+		keyMappings.put(8, new HashSet<Character>(Arrays.asList('t', 'u', 'v')));
+		keyMappings.put(9, new HashSet<Character>(Arrays.asList('w', 'x', 'y', 'z')));
+		return keyMappings;
+	}
+	public static Map<Integer, Set<Character>> initKeyMappings = getKeyMappings();
+	
+	public static Set<String> getMatches(WordTrie trie, int[] keyPresses) {
+		return getMatches(trie, keyPresses, 0)
+	}
+	private static Set<String> getMatches(WordTrie trie, int[] keyPresses, int index) {
+		
+	}
+}
+class TrieNode {
+	public boolean isWord;
+	public char character;
+	public HashMap<Character, Boolean> children;
+	public TrieNode(boolean isWord) {
+		this.isWord = isWord;
+	}
+	public TrieNode(char c) {
+		this.character = c;
+		this.isWord = false;
+	}
+	public TrieNode(char c, boolean isWord) {
+		this.character = c;
+		this.isWord = isWord;
+	}
+}
+class WordTrie {
+	public TrieNode root;
+	public WordTrie(Collection<String> words) {
+		for (String word : words) {
+			add(word);
+		}
+	}
+	public void add(String word) {
+		add()
+	}
+}

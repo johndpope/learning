@@ -1,0 +1,23 @@
+package com.ppp.cashregister;
+
+import java.util.HashMap;
+
+public class FakeProductInfoSource implements ProductInfoSource {
+	static HashMap<String, ProductInfo> productData = new HashMap<String, ProductInfo>();
+	
+	static {
+		productData.put("000000001234", new ProductInfo(16.69, false));
+		productData.put("000000005678", new ProductInfo(7.79, false));
+		productData.put("010101010101", new ProductInfo(2.77, false));
+		productData.put("111100000000", new ProductInfo(5.89, true));
+		productData.put("222200000000", new ProductInfo(6.01, true));
+		productData.put("454500000000", new ProductInfo(3.95, true));
+		productData.put("464600000000", new ProductInfo(149.95, false));
+		productData.put("474700000000", new ProductInfo(20.11, true));
+	}
+	
+	public HashMap<String, ProductInfo> getData() {
+		
+		return productData;
+	};
+}

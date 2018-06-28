@@ -1,0 +1,25 @@
+package com.ppp.labelmaker;
+
+import java.util.Date;
+
+public class LabelInfo {
+	private String title;
+	private String recorder;
+	private Date recordingDate;
+	private int durationMinutes;
+	private int durationSeconds;
+	private int startAtMinutes;
+	private int startAtSeconds;
+	
+	public LabelInfo(String title, String recorder,
+			Date recordingDate, int durationMinutes, int durationSeconds,
+			int startAtMinutes, int startAtSeconds) {
+		this.title = title;
+		this.recorder = recorder; 
+		this.recordingDate = recordingDate;
+		this.durationMinutes = durationMinutes;
+		this.durationSeconds = durationSeconds;
+		this.startAtMinutes =  startAtMinutes;
+		this.startAtSeconds = startAtSeconds;
+	}
+}

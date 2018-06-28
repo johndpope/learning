@@ -1,0 +1,50 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.cashregister;
+import static org.junit.Assert.*;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.ppp.paga.PAGAClient;
+import com.ppp.util.*;
+
+@RunWith(JMock.class)
+public class CheckOutTest {
+
+	private Mockery context;
+	private PAGAClient mockPAGAClient;
+
+	@Before
+	public void setUp() throws Exception {
+		context = new JUnit4Mockery();
+		mockPAGAClient = context.mock(PAGAClient.class);
+	}
+
+	@Test
+	public void abortIfStartFailed() {
+		context.checking(new Expectations() {{
+			oneOf(mockPAGAClient).startTransaction("someMerchantId");
+			will(returnValue(false));
+		}});
+		
+		CheckOut checkOut = new CheckOut("someMerchantId", mockPAGAClient);
+		assertFalse(checkOut.pay("1234567", "05/12", new Money(1.00)));
+		assertEquals("Couldn't connect with payment gateway", checkOut.errorMessage());
+	}
+
+}

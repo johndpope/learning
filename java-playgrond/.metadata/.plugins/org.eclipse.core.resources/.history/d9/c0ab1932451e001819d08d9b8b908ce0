@@ -1,0 +1,10 @@
+package com.ppp.cashregister;
+
+import java.util.HashMap;
+
+public class ProductInfoDB implements ProductInfoSource {
+
+	public HashMap<String, ProductInfo> getData() {
+		throw new RuntimeException("not implemented");
+	}
+}

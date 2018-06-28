@@ -1,0 +1,80 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.cashregister;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.ppp.util.Money;
+
+public class Purchase {
+
+	static final double TAX = 0.05;
+	static final Money TAX_THRESHOLD = new Money(4);
+
+	private List<String> products;
+
+	static Map<String, ProductInfo> productData;
+	
+//	static {
+//		productData = new HashMap<String, ProductInfo>();
+//		productData.put("000000001234", new ProductInfo(16.69, false));
+//		productData.put("000000005678", new ProductInfo(7.79, false));
+//		productData.put("010101010101", new ProductInfo(2.77, false));
+//		productData.put("111100000000", new ProductInfo(5.89, true));
+//		productData.put("222200000000", new ProductInfo(6.01, true));
+//		productData.put("454500000000", new ProductInfo(3.95, true));
+//		productData.put("464600000000", new ProductInfo(149.95, false));
+//		productData.put("474700000000", new ProductInfo(20.11, true));
+//	}
+
+	public Purchase(ProductInfoSource database) {
+		Purchase.productData = database.getData();
+		products = new ArrayList<String>();
+	}
+
+	public Money total() {
+		return subtotal().add(tax());
+	}
+
+	public Money subtotal() {
+		Money total = new Money(0);
+		for (String product : products)
+			total = total.add(priceFor(product));
+		return total;
+	}
+	
+	private Money priceFor(String product) {
+		return productData.get(product).price;
+	}
+
+	public void add(String product) {
+		products.add(product);
+	}
+
+	public Money tax() {
+		Money subtotal = new Money(0);
+		for (String product : products)
+			if (isTaxable(product))
+				subtotal = subtotal.add(priceFor(product));
+		if (subtotal.compareTo(TAX_THRESHOLD) < 0)
+			return new Money(0);
+		return subtotal.multiply(TAX);
+	}
+
+	private boolean isTaxable(final String product) {
+		return productData.get(product).taxable;
+	}
+
+}

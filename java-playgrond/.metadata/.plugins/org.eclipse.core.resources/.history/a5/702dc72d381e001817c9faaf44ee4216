@@ -1,0 +1,44 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.labelmaker;
+
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+public class AudioTapeTest {
+	private AudioTape tape;
+
+	@Before
+	public void setUp() {
+		tape = new AudioTape();
+	}
+
+	@Test
+	public void allTextsFit() {
+		String[] label = tape.makeLabel("CBCSignal", null, DateUtil.createDate(2009, 11, 3, 8, 20), 2, 59, 0, 0);
+		String[] expected = new String[] { "CBCSignal 0911030820", "Start0:00 dur2:59" };
+		assertLabel(expected, label);
+	}
+
+	@Test
+	public void titleShortened() {
+		String[] label = tape.makeLabel("CBCSignal Is Too Long", null, DateUtil.createDate(2009, 11, 3, 8, 20), 2, 59, 0, 0);
+		String[] expected = new String[] { "CBCSignal Is To 0911030820", "Start0:00 dur2:59" };
+		assertLabel(expected, label);
+	}
+	
+	private void assertLabel(String[] expected, String[] label) {
+		Assert.assertArrayEquals(expected, label);
+	}
+}

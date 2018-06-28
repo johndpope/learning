@@ -1,0 +1,56 @@
+package practice;
+
+import java.io.*;
+import java.util.*;	
+import java.math.*;
+
+public class ConnectedCells {
+	public static int getRegionSize(int[][] matrix, int row, int col, boolean[][] visited) {
+		if (row < 0 || col < 0 || row >= matrix.length || col >= matrix[row].length) {
+			return 0;
+		}
+		if (matrix[row][col] == 0) {
+			return 0;
+		}
+		visited[row][col] = true;
+		int size = 1;
+		for (int r = row - 1; r <= row + 1; r++) {
+			for (int c = col - 1; c <= col + 1; c++) {
+				if (r != row && c != col)
+					size += getRegionSize(matrix, r, c, visited);
+			}
+		}
+		return size;
+	}
+	
+	public static int getBiggestRegion(int[][] matrix) {
+		int maxRegion = 0;
+		int numRegions = 0;
+		boolean[][] visited = new boolean[matrix.length][matrix[0].length];
+		
+		
+		for (int row = 0; row < matrix.length; row++) {
+			for (int col = 0; col < matrix[row].length; col++) {
+				if (matrix[row][col] == 1 && visited[row][col] == false) {
+					int size = getRegionSize(matrix, row, col, visited);
+					maxRegion = Math.max(size, maxRegion);
+				}
+			}
+		}
+		
+		return maxRegion;
+	}
+	
+	public static void main(String[] args) {
+		int[][] matrix = new int[][] {
+			{0,0,0,1,1,0,0},
+			{0,1,0,0,1,1,0},
+			{1,1,0,1,0,0,1},
+			{0,0,0,0,0,1,0},
+			{1,1,0,0,0,0,0},
+			{0,0,0,1,0,0,0},
+		};
+		int maxRegion = getBiggestRegion(matrix);
+		System.out.println("The biggest region is of: " + maxRegion + " size.");
+	}
+}

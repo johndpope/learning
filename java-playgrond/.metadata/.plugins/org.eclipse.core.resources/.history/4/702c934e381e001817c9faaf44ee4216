@@ -1,0 +1,47 @@
+// ***************************************************************************
+// Copyright (c) 2009, 3P Vantage, Inc., All Rights Reserved.
+//
+// This code is the exclusive property of 3P Vantage, Inc. It may ONLY be
+// used by students during 3P Vantage's courses or by individuals
+// who are being coached by 3P Vantage on a project.
+//
+// This code may NOT be copied or used for any other purpose without the prior
+// written consent of 3P Vantage, Inc.
+// ****************************************************************************
+
+package com.ppp.labelmaker;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Disc extends Media {
+	public String[] makeLabel(String title, String recorder,
+			Date recordingDate, int startAtMinutes, int startAtSeconds,
+			int durationMinutes, int durationSeconds) {
+		return createLabel(title, recordingDate, durationMinutes, durationSeconds);
+	}
+
+	public String[] createLabel(String title, Date recordingDate,
+			int durationMinutes, int durationSeconds) {
+		String[] label = new String[labelHeight()];
+		label[0] = fitTitleTo(title, labelWidth());
+		label[1] = dateInLongForm(recordingDate);
+		label[2] = "Duration " + Utilities.formatTime(durationMinutes, durationSeconds);
+		return label;
+	}
+
+	private String dateInLongForm(Date date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm");
+		return dateFormat.format(date);
+	}
+
+	@Override
+	protected int labelHeight() {
+		return 3;
+	}
+
+	@Override
+	protected int labelWidth() {
+		return 20;
+	}
+}
