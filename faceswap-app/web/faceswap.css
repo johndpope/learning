@@ -1,0 +1,21 @@
+.sign::before {
+  font-size:200px;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.plus::before {
+  content:"+";
+}
+
+.equals::before {
+  content:"=";
+  color:#FDAA4C;
+}
+
+.col img {
+  max-width:100%
+}
